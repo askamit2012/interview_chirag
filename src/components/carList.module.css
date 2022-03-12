@@ -1,0 +1,17 @@
+.mainDiv {
+  color: purple;
+}
+
+.mainDiv h4 {
+  font-family: cursive;
+  font-size: 1.3em;
+}
+
+.singleCar {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  font-size: 1.4em;
+  font-family: cursive;
+  margin: 10px 0;
+}

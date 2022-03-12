@@ -1,64 +1,67 @@
 import React from "react";
-import { useState, useEffect } from "react";
+import { useState } from "react";
+import styles from "./userInput.module.css";
 
 const UserInput = (props) => {
   const [brand, setBrand] = useState("");
   const [model, setModel] = useState("");
   const [year, setYear] = useState("");
 
-  useEffect(() => {
-    console.log("Hello");
-  }, [props.carList]);
-
   const brandHandler = (e) => setBrand(e.target.value);
   const modelHandler = (e) => setModel(e.target.value);
   const yearHandler = (e) => setYear(e.target.value);
-  const addCarHandler = () => {
+
+  const addCarBtnHandler = () => {
     if (!brand || !model || !year) {
       return;
     }
-    console.log("Inside add Car handler");
+
     let carList = [...props.carList];
     if (carList.length > 0) {
-      carList.forEach((car) => {
-        console.log("Inside ForEacg");
-        if (car.brand === brand && car.model === model) {
-          car.count++;
+      for (let i = 0; i < carList.length; i++) {
+        console.log(i, carList[i].brand, brand, carList[i].model, model);
+        if (carList[i].brand === brand && carList[i].model === model) {
+          carList[i].count++;
           props.setCarList([...carList]);
-          console.log("inside if");
-        } else {
-          console.log("inside else");
-          const newCar = {
-            brand,
-            model,
-            year,
-            count: 0,
-            id: new Date().getTime().toString(),
-          };
-          carList.push(newCar);
-          props.setCarList([...carList]);
+          setBrand("");
+          setModel("");
+          setYear("");
+          return;
         }
-      });
-    } else {
-      console.log("Inside main else");
+      }
       const newCar = {
         brand,
         model,
         year,
-        count: 0,
+        count: 1,
         id: new Date().getTime().toString(),
       };
       carList.push(newCar);
       props.setCarList([...carList]);
+      setBrand("");
+      setModel("");
+      setYear("");
+      return;
+    } else {
+      const newCar = {
+        brand,
+        model,
+        year,
+        count: 1,
+        id: new Date().getTime().toString(),
+      };
+      carList.push(newCar);
+      props.setCarList([...carList]);
+      setBrand("");
+      setModel("");
+      setYear("");
     }
-    setBrand("");
-    setModel("");
-    setYear("");
+    props.setAddCar((prev) => !prev);
   };
 
   return (
-    <div>
-      <h4>Please Enter The Car details: </h4>
+    <div className={styles.mainDiv}>
+      <h4 id={styles.title}>Please Enter The Car details: </h4>
       <span>Brand</span>
       <br />
       <input onChange={brandHandler} value={brand} />
@@ -67,9 +70,19 @@ const UserInput = (props) => {
       <br />
       <input onChange={modelHandler} value={model} />
       <br />
-      <span>Year of Manufacture</span> <br />
-      <input onChange={yearHandler} value={year} />
-      <button onClick={addCarHandler}>Add Car</button>
+      <span>Year of Manufacture</span>
+      <br />
+      <input
+        onChange={yearHandler}
+        value={year}
+        type="number"
+        placeholder="2015"
+        min={2015}
+        max={new Date().getFullYear()}
+      />
+      <button onClick={addCarBtnHandler} id={styles.addCarBtn}>
+        Add Car
+      </button>
     </div>
   );
 };
